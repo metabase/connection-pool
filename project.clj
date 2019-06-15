@@ -1,4 +1,4 @@
-(defproject metabase/connection-pool "1.0.0-SNAPSHOT"
+(defproject metabase/connection-pool "1.0.0"
   :description "Connection pools for JDBC databases. Simple wrapper around C3P0."
   :url "https://github.com/metabase/connection-pool"
   :min-lein-version "2.5.0"
@@ -17,7 +17,7 @@
    "lint"                      ["do" ["eastwood"] ["bikeshed"] ["check-namespace-decls"] ["docstring-checker"]]}
 
   :dependencies
-  [[com.mchange/c3p0 "0.9.5.3"]]
+  [[com.mchange/c3p0 "0.9.5.4"]]
 
   :profiles
   {:dev
