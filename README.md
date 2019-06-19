@@ -37,7 +37,7 @@ You can set connection pool options such as size in a `c3p0.properties` file, or
   (connection-pool/connection-pool-spec my-jdbc-spec connection-pool-properties))
 ```
 
-See [https://www.mchange.com/projects/c3p0/#configuration_properties(https://www.mchange.com/projects/c3p0/#configuration_properties) for a list of all options.
+See [https://www.mchange.com/projects/c3p0/#configuration_properties](https://www.mchange.com/projects/c3p0/#configuration_properties) for a list of all options.
 
 ### Destroying connection pools
 
