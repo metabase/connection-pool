@@ -1,4 +1,4 @@
-(defproject metabase/connection-pool "1.0.0"
+(defproject metabase/connection-pool "1.0.1-SNAPSHOT"
   :description "Connection pools for JDBC databases. Simple wrapper around C3P0."
   :url "https://github.com/metabase/connection-pool"
   :min-lein-version "2.5.0"
