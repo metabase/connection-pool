@@ -48,3 +48,7 @@ See [https://www.mchange.com/projects/c3p0/#configuration_properties](https://ww
 ```
 
 Note that due to me making bad decisions that I haven't fixed yet you currently have to pull the DataSource out of the pool spec yourself. (I plan to fix this in the future)
+
+### Legal Stuff
+
+Copyright © 2019 [Metabase, Inc.](https://metabase.com/). This project is licensed under the Eclipse Public License,  same as Clojure.
