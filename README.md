@@ -44,7 +44,7 @@ See [https://www.mchange.com/projects/c3p0/#configuration_properties](https://ww
 `destroy-connection-pool!` will destroy the connection pool you created:
 
 ```clj
-`(connection-pool/destroy-connection-pool! (:datasource pool-spec))
+(connection-pool/destroy-connection-pool! (:datasource pool-spec))
 ```
 
 Note that due to me making bad decisions that I haven't fixed yet you currently have to pull the DataSource out of the pool spec yourself. (I plan to fix this in the future)
