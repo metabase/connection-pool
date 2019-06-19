@@ -51,4 +51,4 @@ Note that due to me making bad decisions that I haven't fixed yet you currently 
 
 ### Legal Stuff
 
-Copyright © 2019 [Metabase, Inc.](https://metabase.com/). This project is licensed under the Eclipse Public License,  same as Clojure.
+Copyright © 2019 [Metabase, Inc](https://metabase.com/). This project is licensed under the Eclipse Public License,  same as Clojure.
