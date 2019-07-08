@@ -57,14 +57,28 @@
   ([spec, ^Map pool-properties]
    (DataSources/pooledDataSource (unpooled-data-source spec), pool-properties)))
 
-(def ^{:arglists '([spec] [spec pool-properties-map])} connection-pool-spec
+(defn connection-pool-spec
   "Create a new connection pool for a JDBC `spec` and return a spec for it. Optionally pass a map of connection pool
   properties -- see https://www.mchange.com/projects/c3p0/#configuration_properties for a description of valid options
   and their default values."
-  (comp (fn [x] {:datasource x}) pooled-data-source))
+  ([spec]
+   {:datasource (pooled-data-source spec)})
+
+  ([spec pool-properties-map]
+   {:datasource (pooled-data-source spec pool-properties-map)}))
 
 
 (defn destroy-connection-pool!
   "Immediately release all resources held by a connection pool."
-  [^DataSource pooled-data-source]
-  (DataSources/destroy pooled-data-source))
+  [spec-or-data-source]
+  (cond
+    (map? spec-or-data-source)
+    (recur (:datasource spec-or-data-source))
+
+    (instance? DataSource spec-or-data-source)
+    (DataSources/destroy ^DataSource spec-or-data-source)
+
+    :else
+    (throw
+     (IllegalArgumentException.
+      "Don't know how to destroy conn pool: expected JDBC spec with `:datasource` or instance of `DataSource`."))))
