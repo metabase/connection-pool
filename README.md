@@ -32,8 +32,8 @@ You can set connection pool options such as size in a `c3p0.properties` file, or
    "minPoolSize"     1
    "initialPoolSize" 1
    "maxPoolSize"     15})
-   
-(def my-pool-spec 
+
+(def my-pool-spec
   (connection-pool/connection-pool-spec my-jdbc-spec connection-pool-properties))
 ```
 
@@ -44,11 +44,9 @@ See [https://www.mchange.com/projects/c3p0/#configuration_properties](https://ww
 `destroy-connection-pool!` will destroy the connection pool you created:
 
 ```clj
-(connection-pool/destroy-connection-pool! (:datasource pool-spec))
+(connection-pool/destroy-connection-pool! pool-spec)
 ```
-
-Note that due to me making bad decisions that I haven't fixed yet you currently have to pull the DataSource out of the pool spec yourself. (I plan to fix this in the future)
 
 ### Legal Stuff
 
-Copyright © 2019 [Metabase, Inc](https://metabase.com/). This project is licensed under the Eclipse Public License,  same as Clojure.
+Copyright © 2019 [Metabase, Inc](https://metabase.com/). This project is licensed under the Eclipse Public License, same as Clojure.
