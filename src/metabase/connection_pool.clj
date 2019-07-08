@@ -47,7 +47,7 @@
   (map->properties (dissoc spec :classname :subprotocol :subname)))
 
 (defn ^:private unpooled-data-source
-  [{:keys [subname subprotocol], :as spec}]
+  ^DataSource [{:keys [subname subprotocol], :as spec}]
   (proxy-data-source (format "jdbc:%s:%s" subprotocol subname) (spec->properties spec)))
 
 (defn- pooled-data-source ^DataSource

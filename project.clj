@@ -1,4 +1,4 @@
-(defproject metabase/connection-pool "1.0.2-SNAPSHOT"
+(defproject metabase/connection-pool "1.0.2"
   :description "Connection pools for JDBC databases. Simple wrapper around C3P0."
   :url "https://github.com/metabase/connection-pool"
   :min-lein-version "2.5.0"
@@ -11,7 +11,6 @@
    "bikeshed"                  ["with-profile" "+bikeshed" "bikeshed" "--max-line-length" "120"]
    "check-namespace-decls"     ["with-profile" "+check-namespace-decls" "check-namespace-decls"]
    "eastwood"                  ["with-profile" "+eastwood" "eastwood"]
-   "check-reflection-warnings" ["with-profile" "+reflection-warnings" "check"]
    "docstring-checker"         ["with-profile" "+docstring-checker" "docstring-checker"]
    ;; `lein lint` will run all linters
    "lint"                      ["do" ["eastwood"] ["bikeshed"] ["check-namespace-decls"] ["docstring-checker"]]}
@@ -37,7 +36,7 @@
 
    :eastwood
    {:plugins
-    [[jonase/eastwood "0.3.5" :exclusions [org.clojure/clojure]]]
+    [[jonase/eastwood "0.3.6" :exclusions [org.clojure/clojure]]]
 
     :add-linters
     [:unused-private-vars
