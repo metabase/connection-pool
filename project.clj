@@ -1,4 +1,4 @@
-(defproject metabase/connection-pool "1.0.1-SNAPSHOT"
+(defproject metabase/connection-pool "1.0.1"
   :description "Connection pools for JDBC databases. Simple wrapper around C3P0."
   :url "https://github.com/metabase/connection-pool"
   :min-lein-version "2.5.0"
@@ -22,7 +22,7 @@
   :profiles
   {:dev
    {:dependencies
-    [[org.clojure/clojure "1.10.0"]
+    [[org.clojure/clojure "1.10.1"]
      [expectations "2.2.0-beta2"]]
 
     :injections
