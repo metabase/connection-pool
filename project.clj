@@ -49,7 +49,8 @@
 
    :bikeshed
    {:plugins
-    [[lein-bikeshed "0.5.2"]]}
+    [[lein-bikeshed "0.5.2"
+      :exclusions [org.clojure/tools.namespace]]]}
 
    :check-namespace-decls
    {:plugins               [[lein-check-namespace-decls "1.0.2"]]
