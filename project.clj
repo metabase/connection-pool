@@ -1,4 +1,4 @@
-(defproject metabase/connection-pool "1.0.2"
+(defproject metabase/connection-pool "1.0.3"
   :description "Connection pools for JDBC databases. Simple wrapper around C3P0."
   :url "https://github.com/metabase/connection-pool"
   :min-lein-version "2.5.0"
@@ -7,8 +7,7 @@
             :url "https://raw.githubusercontent.com/metabase/connection-pool/master/LICENSE"}
 
   :aliases
-  {"test"                      ["with-profile" "+expectations" "expectations"]
-   "bikeshed"                  ["with-profile" "+bikeshed" "bikeshed" "--max-line-length" "120"]
+  {"bikeshed"                  ["with-profile" "+bikeshed" "bikeshed" "--max-line-length" "120"]
    "check-namespace-decls"     ["with-profile" "+check-namespace-decls" "check-namespace-decls"]
    "eastwood"                  ["with-profile" "+eastwood" "eastwood"]
    "docstring-checker"         ["with-profile" "+docstring-checker" "docstring-checker"]
@@ -22,17 +21,11 @@
   {:dev
    {:dependencies
     [[org.clojure/clojure "1.10.1"]
-     [expectations "2.2.0-beta2"]]
-
-    :injections
-    [(require 'expectations)
-     ((resolve 'expectations/disable-run-on-shutdown))]
+     [com.h2database/h2 "1.4.197"]
+     [pjstadig/humane-test-output "0.9.0"]]
 
     :jvm-opts
     ["-Xverify:none"]}
-
-   :expectations
-   {:plugins [[lein-expectations "0.0.8" :exclusions [expectations]]]}
 
    :eastwood
    {:plugins
