@@ -7,7 +7,7 @@
   for the options, which are c3p0-specific -- consider abstracting those as well?)"
   (:import com.mchange.v2.c3p0.DataSources
            [java.sql Driver DriverManager]
-           [java.util Map Properties]
+           java.util.Properties
            javax.sql.DataSource))
 
 ;;; ------------------------------------------------ Proxy DataSource ------------------------------------------------
