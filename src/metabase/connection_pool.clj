@@ -7,7 +7,7 @@
   for the options, which are c3p0-specific -- consider abstracting those as well?)"
   (:import com.mchange.v2.c3p0.DataSources
            [java.sql Driver DriverManager]
-           [java.util Map Properties]
+           java.util.Properties
            javax.sql.DataSource))
 
 ;;; ------------------------------------------------ Proxy DataSource ------------------------------------------------
@@ -54,8 +54,8 @@
   ([spec]
    (DataSources/pooledDataSource (unpooled-data-source spec)))
 
-  ([spec, ^Map pool-properties]
-   (DataSources/pooledDataSource (unpooled-data-source spec), pool-properties)))
+  ([spec pool-properties-map]
+   (DataSources/pooledDataSource (unpooled-data-source spec) (map->properties pool-properties-map))))
 
 (defn connection-pool-spec
   "Create a new connection pool for a JDBC `spec` and return a spec for it. Optionally pass a map of connection pool
