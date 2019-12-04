@@ -1,4 +1,4 @@
-(defproject metabase/connection-pool "1.0.3"
+(defproject metabase/connection-pool "1.1.0"
   :description "Connection pools for JDBC databases. Simple wrapper around C3P0."
   :url "https://github.com/metabase/connection-pool"
   :min-lein-version "2.5.0"
@@ -23,6 +23,8 @@
     [[org.clojure/clojure "1.10.1"]
      [com.h2database/h2 "1.4.197"]
      [pjstadig/humane-test-output "0.9.0"]]
+
+    :global-vars {*warn-on-reflection* true}
 
     :jvm-opts
     ["-Xverify:none"]}

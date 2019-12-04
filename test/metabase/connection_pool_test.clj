@@ -1,19 +1,78 @@
 (ns metabase.connection-pool-test
-  (:require [clojure.test :as t]
+  (:require [clojure.test :refer :all]
             [metabase.connection-pool :as connection-pool]))
 
 (def ^:private spec
   {:classname "org.h2.Driver", :subprotocol "h2", :subname "mem:db"})
 
-(t/deftest properties-test
-  (t/testing "Options passed in to `connection-pool-spec` should get parsed correctly"
+(deftest properties-test
+  (testing "Options passed in to `connection-pool-spec` should get parsed correctly"
     (let [description (-> (connection-pool/connection-pool-spec spec {"acquireIncrement"        1
                                                                       "testConnectionOnCheckin" true})
                           :datasource
                           str)]
-      (t/is (= "acquireIncrement -> 1"
-               (re-find #"acquireIncrement -> \d" description))
-            "numeric options should get converted correctly")
-      (t/is (= "testConnectionOnCheckin -> true"
-               (re-find #"testConnectionOnCheckin -> \w+" description))
-            "boolean options should get converted correctly"))))
+      (is (= "acquireIncrement -> 1"
+             (re-find #"acquireIncrement -> \d" description))
+          "numeric options should get converted correctly")
+      (is (= "testConnectionOnCheckin -> true"
+             (re-find #"testConnectionOnCheckin -> \w+" description))
+          "boolean options should get converted correctly"))))
+
+(deftest map->properties-test
+  (testing "Properties should be converted to strings"
+    ;; Properties are equality-comparable to maps
+    (is (= {"A" "true", "B" "false", "C" "100"}
+           (connection-pool/map->properties {:A "true", "B" false, "C" 100})))))
+
+(defrecord ^:private FakeConnection [url props]
+  java.sql.Connection)
+
+(defrecord ^:private FakeDriver []
+  java.sql.Driver
+  (connect [_ url props]
+    (FakeConnection. url props)))
+
+(defn- proxy-data-source ^javax.sql.DataSource [& args]
+ (apply #'connection-pool/proxy-data-source args))
+
+(deftest proxy-data-source-test
+  (testing "Make sure we can create a data source with an explicit driver instance"
+    (is (= (FakeConnection. "jdbc:my-fake-db:localhost" nil)
+           (.getConnection (proxy-data-source (FakeDriver.) "jdbc:my-fake-db:localhost" nil)))))
+
+  (testing "Make sure username/password are set when using the 3-arg getConnection method"
+    (doseq [props [(java.util.Properties.) nil (doto (java.util.Properties.)
+                                                 (.setProperty "password" "abc")
+                                                 (.setProperty "user" "cam-2"))]]
+      (testing (format "with initial properties = %s" (pr-str props))
+        (is (= (FakeConnection. "jdbc:my-fake-db:localhost" {"password" "passw0rd", "user" "cam"})
+               (.getConnection (proxy-data-source (FakeDriver.) "jdbc:my-fake-db:localhost" props)
+                               "cam"
+                               "passw0rd"))))))
+
+  (testing "passing nil username/password to 3-arg getConnection method should existing props"
+    (let [props (doto (java.util.Properties.)
+                  (.setProperty "password" "abc")
+                  (.setProperty "user" "cam-2"))]
+      (is (= (FakeConnection. "jdbc:my-fake-db:localhost" {})
+             (.getConnection (proxy-data-source (FakeDriver.) "jdbc:my-fake-db:localhost" props)
+                             nil
+                             nil))))))
+
+(deftest connection-pool-spec-test
+  (let [{:keys [^javax.sql.DataSource datasource]} (connection-pool/connection-pool-spec
+                                                    {:subprotocol "h2", :subname "mem:in-memory"})]
+    (with-open [conn (.getConnection datasource)
+                stmt (.prepareStatement conn "SELECT 1 AS one;")
+                rset (.executeQuery stmt)]
+      (.next rset)
+      (is (= 1
+             (.getObject rset 1))))))
+
+(deftest pooled-data-source-from-url-test
+  (with-open [conn (.getConnection (connection-pool/pooled-data-source-from-url "jdbc:h2:mem:in-memory"))
+              stmt (.prepareStatement conn "SELECT 1 AS one;")
+              rset (.executeQuery stmt)]
+    (.next rset)
+    (is (= 1
+           (.getObject rset 1)))))
