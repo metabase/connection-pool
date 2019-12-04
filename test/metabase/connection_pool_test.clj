@@ -60,7 +60,8 @@
                              nil))))))
 
 (deftest connection-pool-spec-test
-  (let [{:keys [^javax.sql.DataSource datasource]} (connection-pool/connection-pool-spec {:subprotocol "h2", :subname "mem:in-memory"})]
+  (let [{:keys [^javax.sql.DataSource datasource]} (connection-pool/connection-pool-spec
+                                                    {:subprotocol "h2", :subname "mem:in-memory"})]
     (with-open [conn (.getConnection datasource)
                 stmt (.prepareStatement conn "SELECT 1 AS one;")
                 rset (.executeQuery stmt)]
