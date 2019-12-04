@@ -8,7 +8,10 @@
 
 ### Creating a Connection Pool
 
-You can create a C3P0 connection pool with any `clojure.java.jdbc` connection spec map. (Currently, only maps with `:subname` and `:subprotocol` are supported.) `connection-pool-spec` will return a `clojure.java.jdbc` connection spec you can use directly with JDBC:
+#### From a `clojure.java.jdbc` spec
+
+You can create a C3P0 connection pool with any `clojure.java.jdbc` connection spec map with `:subname` and
+`:subprotocol` keys. `connection-pool-spec` will return a `clojure.java.jdbc` connection spec you can use directly:
 
 ```clj
 (require '[clojure.java.jdbc :as jdbc]
@@ -21,6 +24,18 @@ You can create a C3P0 connection pool with any `clojure.java.jdbc` connection sp
   ```
 
 (You will almost certainly want to store your pool somewhere, such as in an atom).
+
+#### From a JDBC URL String:
+
+You can create a pooled `DataSource` (e.g., for use with [`next-jdbc`](https://github.com/seancorfield/next-jdbc)) by calling `pooled-data-source-from-url`:
+
+```clj
+(require '[next.jdbc :as jdbc]
+         '[metabase.connection-pool :as connection-pool])
+
+(with-open [connection (jdbc/get-connection (connection-pool/pooled-data-source-from-url "jdbc:postgres:cam@localhost:3000/my_db"))]
+  (reduce my-fn init-value (jdbc/plan connection ["SELECT *"])))
+```
 
 ### Configuring the connection pool
 

@@ -79,6 +79,17 @@
   ([driver spec pool-properties-map]
    {:datasource (pooled-data-source driver spec pool-properties-map)}))
 
+(defn pooled-data-source-from-url
+  "Create a new pooled DataSource from a JDBC URL string."
+  (^DataSource [url]
+   (DataSources/pooledDataSource (proxy-data-source url nil)))
+
+  (^DataSource [url pool-properties-map]
+   (DataSources/pooledDataSource (proxy-data-source url nil) (map->properties pool-properties-map)))
+
+  (^DataSource [driver url pool-properties-map]
+   (DataSources/pooledDataSource (proxy-data-source driver url nil) (map->properties pool-properties-map))))
+
 (defn destroy-connection-pool!
   "Immediately release all resources held by a connection pool."
   [spec-or-data-source]
