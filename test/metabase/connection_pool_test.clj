@@ -37,8 +37,8 @@
 
 (deftest proxy-data-source-test
   (testing "Make sure we can create a data source with an explicit driver instance"
-    (is (= {:url "jdbc:my-fake-db:localhost", :props nil})
-        (.getConnection (proxy-data-source (FakeDriver.) "jdbc:my-fake-db:localhost" nil))))
+    (is (= (FakeConnection. "jdbc:my-fake-db:localhost" nil)
+           (.getConnection (proxy-data-source (FakeDriver.) "jdbc:my-fake-db:localhost" nil)))))
 
   (testing "Make sure username/password are set when using the 3-arg getConnection method"
     (doseq [props [(java.util.Properties.) nil (doto (java.util.Properties.)
