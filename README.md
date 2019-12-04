@@ -33,7 +33,7 @@ You can create a pooled `DataSource` (e.g., for use with [`next-jdbc`](https://g
 (require '[next.jdbc :as jdbc]
          '[metabase.connection-pool :as connection-pool])
 
-(with-open [connection (jdbc/get-connection (connection-pool/pooled-data-source-from-url "jdbc:postgresql:cam@localhost:3000/my_db"))]
+(with-open [connection (jdbc/get-connection (connection-pool/pooled-data-source-from-url "jdbc:postgresql:localhost:3000/my_db"))]
   (reduce my-fn init-value (jdbc/plan connection ["SELECT *"])))
 ```
 
