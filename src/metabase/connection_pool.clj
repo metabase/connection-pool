@@ -12,11 +12,24 @@
 
 ;;; ------------------------------------------------ Proxy DataSource ------------------------------------------------
 
+(defn- set-username-and-password! [^Properties properties username password]
+  (let [properties (or properties (Properties.))]
+    (doseq [[k v] {"user" username, "password" password}]
+      (if (some? v)
+        (.setProperty properties k (name v))
+        (.remove properties k)))
+    properties))
+
 (defn- proxy-data-source
   "Normal c3p0 DataSource classes do not properly work with our JDBC proxy drivers for whatever reason. Use our own
   instead, which works nicely."
   (^DataSource [^String jdbc-url, ^Properties properties]
-   (proxy-data-source (DriverManager/getDriver jdbc-url) jdbc-url properties))
+   (reify DataSource
+     (getConnection [_]
+       (DriverManager/getConnection jdbc-url properties))
+
+     (getConnection [_ username password]
+       (DriverManager/getConnection jdbc-url (set-username-and-password! properties username password)))))
 
   (^DataSource [^Driver driver, ^String jdbc-url, ^Properties properties]
    (reify DataSource
@@ -24,12 +37,7 @@
        (.connect driver jdbc-url properties))
 
      (getConnection [_ username password]
-       (let [properties (or properties (Properties.))]
-         (doseq [[k v] {"user" username, "password" password}]
-           (if (some? v)
-             (.setProperty properties k (name v))
-             (.remove properties k)))
-         (.connect driver jdbc-url properties))))))
+       (.connect driver jdbc-url (set-username-and-password! properties username password))))))
 
 
 ;;; ------------------------------------------- Creating Connection Pools --------------------------------------------
