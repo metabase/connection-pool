@@ -58,3 +58,20 @@
              (.getConnection (proxy-data-source (FakeDriver.) "jdbc:my-fake-db:localhost" props)
                              nil
                              nil))))))
+
+(deftest connection-pool-spec-test
+  (let [{:keys [^javax.sql.DataSource datasource]} (connection-pool/connection-pool-spec {:subprotocol "h2", :subname "mem:in-memory"})]
+    (with-open [conn (.getConnection datasource)
+                stmt (.prepareStatement conn "SELECT 1 AS one;")
+                rset (.executeQuery stmt)]
+      (.next rset)
+      (is (= 1
+             (.getObject rset 1))))))
+
+(deftest pooled-data-source-from-url-test
+  (with-open [conn (.getConnection (connection-pool/pooled-data-source-from-url "jdbc:h2:mem:in-memory"))
+              stmt (.prepareStatement conn "SELECT 1 AS one;")
+              rset (.executeQuery stmt)]
+    (.next rset)
+    (is (= 1
+           (.getObject rset 1)))))
